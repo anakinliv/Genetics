@@ -69,6 +69,8 @@ using UnityEngine;
             }
         }
 
+        image.rectTransform.sizeDelta = this.gameOfLife.glg.cellSize;
+
         nextAlive = Random.value > 0.5f;
         Doa();
     }

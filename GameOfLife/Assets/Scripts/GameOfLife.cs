@@ -49,10 +49,12 @@ public class GameOfLife : MonoBehaviour
         }
     }
 
+    public GridLayoutGroup glg;
+
     void Init()
     {
         Cells.Clear();
-        GridLayoutGroup glg = root.GetComponent<GridLayoutGroup>();
+        glg = root.GetComponent<GridLayoutGroup>();
         glg.constraintCount = column;
         glg.cellSize = new Vector2(500 / column, 500 / row);
         for (int i = 0; i < column; i++)
@@ -61,6 +63,7 @@ public class GameOfLife : MonoBehaviour
             {
                 var go = GameObject.Instantiate(CellPrefab);
                 go.transform.SetParent(root);
+                go.GetComponent<RectTransform>().sizeDelta = glg.cellSize;
                 var cellScript = go.GetComponent<Cell>();
                 Vector2Int pos = new Vector2Int(i, j);
                 Cells[pos] = cellScript;
