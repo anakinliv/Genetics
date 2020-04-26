@@ -7,8 +7,8 @@ using UnityEngine;
 
  public class Cell : MonoBehaviour
 {
-    public bool isAlive;
-    private bool nextAlive;
+    public bool[] isAlive;
+    private bool[] nextAlive;
     public Dictionary<Vector2Int, Cell> neighbours;
 
     public Vector2Int pos;
@@ -19,40 +19,54 @@ using UnityEngine;
 
     public void Generate()
     {
-        int otherAlive = 0;
-        foreach (var other in neighbours)
+        for (int i = 0; i < 3; i++)
         {
-            if (other.Value.isAlive)
+            int otherAlive = 0;
+            foreach (var other in neighbours)
             {
-                otherAlive++;
+                if (other.Value.isAlive[i])
+                {
+                    otherAlive++;
+                }
             }
-        }
 
-        if (otherAlive == 3)
-        {
-            nextAlive = true;
-        }
-        else if (otherAlive == 2)
-        {
-            nextAlive = isAlive;
-        }
-        else
-        {
-            nextAlive = false;
+            if (otherAlive == 3)
+            {
+                nextAlive[i] = true;
+            }
+            else if (otherAlive == 2)
+            {
+                nextAlive[i] = isAlive[i];
+            }
+            else
+            {
+                nextAlive[i] = false;
+            }
         }
     }
 
     public void Doa()
     {
-        isAlive = nextAlive;
-        if (isAlive)
+        float r = 0;
+        float g = 0;
+        float b = 0;
+        for (int i = 0; i < 3; i++)
         {
-            image.color = Color.black;
+            isAlive[i] = nextAlive[i];
+            switch (i)
+            {
+                case 0:
+                    r = isAlive[i] ? 1 : 0;
+                    break;
+                    case 1:
+                        g = isAlive[i] ? 1 : 0;
+                        break;
+                        case 2:
+                            b = isAlive[i] ? 1 : 0;
+                            break;
+            }
         }
-        else
-        {
-            image.color = Color.white;
-        }
+        image.color = new Color(r, g, b, 1);
     }
 
     public void Init(GameOfLife gameOfLife,Vector2Int pos)
@@ -71,7 +85,11 @@ using UnityEngine;
 
         image.rectTransform.sizeDelta = this.gameOfLife.glg.cellSize;
 
-        nextAlive = Random.value > 0.5f;
+        nextAlive = new bool[3];
+        nextAlive[0] = Random.value > 0.5f;
+        nextAlive[1] = Random.value > 0.5f;
+        nextAlive[2] = Random.value > 0.5f;
+        isAlive = new bool[3];
         Doa();
     }
     

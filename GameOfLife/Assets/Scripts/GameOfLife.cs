@@ -45,7 +45,7 @@ public class GameOfLife : MonoBehaviour
                 cell.Doa();
             }
 
-            updateTime += 0.3f;
+            updateTime += 0.1f;
         }
     }
 
